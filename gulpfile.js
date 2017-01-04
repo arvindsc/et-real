@@ -1,12 +1,12 @@
-var gulp = require('gulp');
-var sass= require('gulp-sass');
 var args = require('yargs').argv;
 var config = require('./gulp.config')();
+var del = require('del');
+var gulp = require('gulp');
+var sass = require('gulp-sass');
 var $ = require('gulp-load-plugins')({ lazy: true });
 
 gulp.task('vet', function () {
-    log('I am inside the vet task');
-    log({ 'msg1': 'error1', 'msg2': 'error2' });
+
     return gulp
         .src(config.alljs)
         .pipe($.if(args.verbose, $.print()))
@@ -16,26 +16,41 @@ gulp.task('vet', function () {
         .pipe($.jshint.reporter('fail'));
 });
 
-gulp.task('styles', function () {
-    
+gulp.task('styles', ['clean-styles'], function () {
+    log('Compling Sass --> css')
     return gulp
         .src(config.scss)
-        .pipe($.print())
-        .pipe(sass().on('error', sass.logError))
+        .pipe($.plumber())
+        .pipe(sass())
         .pipe($.autoprefixer({ browsers: ['Last 2 version', '> 5%'] }))
         .pipe(gulp.dest(config.temp));
 });
 
+gulp.task('clean-styles', function () {
+    var files = config.temp + '**/*.css';
+    clean(files);
+})
+
+gulp.task('sass-watcher', function () {
+    gulp.watch(config.scss, ['styles']);
+})
+
 ////////////////////
+
+function clean(path) {
+    log('Cleaning: ' + $.util.colors.blue(path))
+    del(path);
+}
+
 function log(msg) {
     if (typeof (msg) === 'object') {
         for (var item in msg) {
             if (msg.hasOwnProperty(item)) {
-                $.util.log($.util.colors.green(msg[item]));
+                $.util.log($.util.colors.blue(msg[item]));
             }
         }
     } else {
-        $.util.log($.util.colors.bgGreen(msg));
+        $.util.log($.util.colors.blue(msg));
     }
 
 }
