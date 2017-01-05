@@ -1,16 +1,31 @@
 module.exports = (function () {
-    var base = './src/client/';
+    var client = './src/client/';
+    var server = './src/server/';
     var temp = './.tmp/';
     var config = {
-        temp: temp,
-        alljs: [base + '**/*.js',
+    
+        alljs: [client + '**/*.js',
             './*.js'
         ],
-        base: base,
+        build:'./build/',
+        client: client,
         css: temp + 'style.css',
-        js: [base + '**/*.js'],
-        index: base + 'index.html',
-        scss: base + 'styles/style.scss',
+        fonts:'./bower_components/font-awesome/fonts/**/*.*/', 
+        js: [client + '**/*.js'],
+        htmltemplates: client + '**/*.html',
+        images: client+ 'images/**/*.*',
+        index: client + 'index.html',
+        scss: client + 'styles/style.scss',
+        server:server,
+        temp: temp,
+
+        /**
+         * templates cache
+         */
+        templateCache:{
+
+        },
+
         /**
          * Bower and NPM locations
          */
@@ -23,7 +38,9 @@ module.exports = (function () {
          * Node Settings
          */
         defaultPort: 7302,
-        nodeServer: './src/server/app.js'
+        nodeServer: './src/server/app.js',
+        browserReloadDelay:1000,
+
 
     };
     config.getWiredepDefaultOptions = function () {

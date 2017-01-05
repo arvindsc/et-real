@@ -1,3 +1,7 @@
 body {
   font: 100% Helvetica, sans-serif;
-  color: #333; }
+  color: brown; }
+  body #app {
+    height: 200px;
+    width: 200px;
+    background-color: brown; }

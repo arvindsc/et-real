@@ -1,7 +1,12 @@
 $font-stack:    Helvetica, sans-serif;
-$primary-color: #333;
+$primary-color: brown;
 
 body {
   font: 100% $font-stack;
   color: $primary-color;
+  #app{
+    height: 200px;
+    width:200px;
+    background-color: $primary-color
+  }
 }
