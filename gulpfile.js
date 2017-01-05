@@ -1,9 +1,11 @@
-var args = require('yargs').argv;
-var config = require('./gulp.config')();
-var del = require('del');
-var gulp = require('gulp');
-var sass = require('gulp-sass');
-var $ = require('gulp-load-plugins')({ lazy: true });
+var args = require('yargs').argv,
+    config = require('./gulp.config'),
+    del = require('del'),
+    gulp = require('gulp'),
+    port = process.env.PORT || config.defaultPort,
+    sass = require('gulp-sass'),
+    $ = require('gulp-load-plugins')({ lazy: true });
+
 
 gulp.task('vet', function () {
 
@@ -35,7 +37,46 @@ gulp.task('sass-watcher', function () {
     gulp.watch(config.scss, ['styles']);
 })
 
-////////////////////
+gulp.task('wiredep', function () {
+    log('Wire up the bower css js and app js into the html');
+    var options = config.getWiredepDefaultOptions();
+    var wiredep = require('wiredep').stream;
+    return gulp
+        .src(config.index)
+        .pipe(wiredep(options))
+        .pipe($.print())
+        .pipe($.inject(gulp.src(config.js)))
+        .pipe(gulp.dest(config.base));
+
+});
+
+gulp.task('inject', ['wiredep', 'styles'], function () {
+    log("Wire up the app css into the html, and call wiredep");
+    var options = config.getWiredepDefaultOptions();
+    var wiredep = require('wiredep').stream;
+    return gulp
+        .src(config.index)
+        .pipe(wiredep(options))
+        .pipe($.print())
+        .pipe($.inject(gulp.src(config.css)))
+        .pipe(gulp.dest(config.base));
+
+});
+
+gulp.task('serve-dev', function () {
+
+    var nodeOptions = {
+        script: config.nodeServer,
+        delayTime: 1,
+        env: {
+            'PORT': '',
+            'NOE_ENV': isDev ? 'dev' : 'build'
+        }
+    };
+    return $.nodemon(nodeOptions);
+});
+
+//////////////////// Utility Functions \\\\\\\\\\\\\\\\\\\\\\\
 
 function clean(path) {
     log('Cleaning: ' + $.util.colors.blue(path))
