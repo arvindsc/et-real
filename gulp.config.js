@@ -1,6 +1,6 @@
 module.exports = (function () {
-    var base = './client/src/';
-    var temp='./.tmp/';
+    var base = './src/client/';
+    var temp = './.tmp/';
     var config = {
         temp: temp,
         alljs: [base + '**/*.js',
@@ -22,18 +22,18 @@ module.exports = (function () {
         /**
          * Node Settings
          */
-        defaultPort:7302,
+        defaultPort: 7302,
         nodeServer: './src/server/app.js'
 
     };
     config.getWiredepDefaultOptions = function () {
         var options = {
-            bowerJson: config.bower.json,
+            json: config.bower.bowerJson,
             directory: config.bower.directory,
             ignorePath: config.bower.ignorePath
         };
         return options;
-    }
+    };
     return config;
 })();
 

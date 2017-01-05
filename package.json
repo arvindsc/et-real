@@ -10,15 +10,12 @@
     "url": "https://github.com/arvindsc/et-real.git"
   },
   "scripts": {
+    "start": "node src/server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
-    "compression": "^1.6.2",
-    "cors": "^2.8.1",
-    "express": "^4.14.0",
-    "morgan": "^1.7.0",
-    "serve-favicon": "^2.3.2"
+    "express": "^4.14.0"
   },
   "devDependencies": {
     "del": "^2.2.2",

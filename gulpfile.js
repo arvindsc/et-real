@@ -19,7 +19,8 @@ gulp.task('vet', function () {
 });
 
 gulp.task('styles', ['clean-styles'], function () {
-    log('Compling Sass --> css')
+    log('Compling Sass --> css');
+    log(config.scss);
     return gulp
         .src(config.scss)
         .pipe($.plumber())
@@ -31,15 +32,16 @@ gulp.task('styles', ['clean-styles'], function () {
 gulp.task('clean-styles', function () {
     var files = config.temp + '**/*.css';
     clean(files);
-})
+});
 
 gulp.task('sass-watcher', function () {
     gulp.watch(config.scss, ['styles']);
-})
+});
 
 gulp.task('wiredep', function () {
     log('Wire up the bower css js and app js into the html');
     var options = config.getWiredepDefaultOptions();
+    console.log(options);
     var wiredep = require('wiredep').stream;
     return gulp
         .src(config.index)
@@ -51,7 +53,7 @@ gulp.task('wiredep', function () {
 });
 
 gulp.task('inject', ['wiredep', 'styles'], function () {
-    log("Wire up the app css into the html, and call wiredep");
+    log('Wire up the app css into the html, and call wiredep');
     var options = config.getWiredepDefaultOptions();
     var wiredep = require('wiredep').stream;
     return gulp
@@ -64,7 +66,7 @@ gulp.task('inject', ['wiredep', 'styles'], function () {
 });
 
 gulp.task('serve-dev', function () {
-
+    var isDev = true;
     var nodeOptions = {
         script: config.nodeServer,
         delayTime: 1,
@@ -79,7 +81,7 @@ gulp.task('serve-dev', function () {
 //////////////////// Utility Functions \\\\\\\\\\\\\\\\\\\\\\\
 
 function clean(path) {
-    log('Cleaning: ' + $.util.colors.blue(path))
+    log('Cleaning: ' + $.util.colors.blue(path));
     del(path);
 }
 
